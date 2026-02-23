@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from utils.message_extractor import extract_message_context
-from services.gemini_service import generate_ticket_data
+from services.groq_service import generate_ticket_data
 from services.jira_service import create_jira_issue
 import os
 

@@ -1,10 +1,9 @@
-import google.generativeai as genai
+from groq import Groq
 import os
 import json
 import re
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate_ticket_data(context: dict, extra_context: str = "") -> dict:
     prompt = f"""
@@ -27,14 +26,17 @@ Return this JSON shape:
 }}
 """
 
-    response = model.generate_content(prompt)
-    text = response.text.strip()
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+    )
+
+    text = response.choices[0].message.content.strip()
 
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        # Strip any accidental markdown fences
         match = re.search(r'\{.*\}', text, re.DOTALL)
         if match:
             return json.loads(match.group())
-        raise ValueError(f"Gemini returned invalid JSON: {text[:200]}")
+        raise ValueError(f"Groq returned invalid JSON: {text[:200]}")
