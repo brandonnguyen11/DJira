@@ -1,0 +1,5 @@
+nextcord
+groq
+requests
+python-dotenv
+aiosqlite
