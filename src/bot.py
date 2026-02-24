@@ -16,7 +16,9 @@ async def on_ready():
     await init_db()
     bot.load_extension("commands.turnintoticket")
     bot.load_extension("commands.setup")
+    await bot.sync_all_application_commands()
     print(f"✅ Logged in as {bot.user}")
     print(f"✅ Serving {len(bot.guilds)} servers")
+    print(f"✅ Slash commands synced")
 
 bot.run(os.getenv("DISCORD_TOKEN"))
